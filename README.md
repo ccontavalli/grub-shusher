@@ -30,7 +30,7 @@ How to use them
     $ make
     $ sudo -s
     # ./mbr /dev/sda
-    # ./kernel /boot/grub/kernel.img
+    # ./grub-kernel /boot/grub/kernel.img
 
 ... and done.
 

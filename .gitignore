@@ -1,2 +1,4 @@
 *.o
 mbr
+grub-kernel
+grub-kernel.o
