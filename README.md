@@ -45,7 +45,8 @@ How to use them
 
   1. `make` will compile the code, you need to have GCC installed.
   2. `grub-kernel ...` will remove the 'Welcome to GRUB!' message from the `kernel.img` file.
-  3. `grub-install /dev/sda` will create a new compressed `core.img` and install it on your disk.
+  3. `grub-install /dev/sda` will create a new compressed image
+     (by merging several other files, including kernel.img) and install it on your disk.
   4. `mbr /dev/sda` will remove a few other messages from the installed mbr.
 
 To make GRUB entirely quiet, my `/etc/defaults/grub` has:
