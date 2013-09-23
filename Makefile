@@ -1,4 +1,4 @@
-CC = gcc-4.8
+#CC = gcc-4.8
 CFLAGS = -std=gnu99
 
 all: mbr grub-kernel
