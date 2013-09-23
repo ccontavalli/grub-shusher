@@ -16,23 +16,37 @@ the needed patches.
 `grub-shusher` contains two tiny .c files that will patch your master boot record
 and grub files to disable those two messages.   
 
-They are relatively risky to use, as they will read your disk and try to patch
-it on the fly, but have used them on a few systems without issues.
+The software is as safe as I could make it: it looks for a specific set of patterns,
+and if not all are found, it stops processing. I have tested it on a few machines,
+and it is working.
+
+Consider though that they will read your master boot record and modify it. This
+probably does not work on EFI systems.
+
 
 **USE THEM AT YOUR OWN RISK**
+
+**ONLY TESTED on AMD64 using BIOS BOOT - NO EFI**
 
 
 How to use them
 ===============
 
-**REPLACE /dev/sda with your GRUB PARTITION, used with grub-setup**
+**REPLACE /dev/sda with your GRUB PARTITION, used with grub-setup or grub-install**
 
     $ make
     $ sudo -s
-    # ./mbr /dev/sda
     # ./grub-kernel /boot/grub/kernel.img
+    # ./grub-kernel /usr/lib/grub/i386-pc/kernel.img
+    # grub-install /dev/sda
+    # ./mbr /dev/sda
 
-... and done.
+... and done. Note that the order is important:
+
+  1. `make` will compile the code, you need to have GCC installed.
+  2. `grub-kernel ...` will remove the 'Welcome to GRUB!' message from the `kernel.img` file.
+  3. `grub-install /dev/sda` will create a new compressed `core.img` and install it on your disk.
+  4. `mbr /dev/sda` will remove a few other messages from the installed mbr.
 
 To make GRUB entirely quiet, my `/etc/defaults/grub` has:
 
@@ -48,7 +62,7 @@ you try this before you `shush` grub.
 
 If something goes wrong, you can:
 
-    # grub-setup /dev/sda
     # apt-get install --reinstall grub2
+    # grub-install /dev/sda
 
 to clean up after yourself.
