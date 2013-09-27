@@ -67,3 +67,5 @@ If something goes wrong, you can:
     # grub-install /dev/sda
 
 to clean up after yourself.
+
+You can read more about [grub-shusher on this blog post](http://rabexc.org/posts/grub-shush).
