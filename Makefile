@@ -12,4 +12,4 @@ mbr.o: mbr.c
 mbr.o: grub-kernel.c
 
 clean:
-	rm -f mbr ./*.o
+	rm -f grub-kernel mbr ./*.o
