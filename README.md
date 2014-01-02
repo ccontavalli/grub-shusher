@@ -29,10 +29,21 @@ probably does not work on EFI systems.
 **ONLY TESTED on AMD64 using BIOS BOOT - NO EFI**
 
 
-How to use them
-===============
+How to use grub-shusher
+=======================
 
 **REPLACE /dev/sda with your GRUB PARTITION, used with grub-setup or grub-install**
+
+
+On Debian Systems
+-----------------
+
+    # ./setup-debian.sh
+
+... and go read [configuring grub](#configuring-grub).
+
+On Any Other System (TM)
+------------------------
 
     $ make
     $ sudo -s
@@ -41,6 +52,7 @@ How to use them
     # grub-install /dev/sda
     # ./mbr /dev/sda
 
+
 ... and done. Note that the order is important:
 
   1. `make` will compile the code, you need to have GCC installed.
@@ -48,6 +60,12 @@ How to use them
   3. `grub-install /dev/sda` will create a new compressed image
      (by merging several other files, including kernel.img) and install it on your disk.
   4. `mbr /dev/sda` will remove a few other messages from the installed mbr.
+
+... and go read [configuring grub](#configuring-grub).
+
+
+Configuring GRUB
+----------------
 
 To make GRUB entirely quiet, my `/etc/defaults/grub` has:
 
