@@ -38,7 +38,7 @@ How to use grub-shusher
 On Debian Systems
 -----------------
 
-    # ./setup-debian.sh
+    # ./setup-debian.sh /dev/sda
 
 ... and go read [configuring grub](#configuring-grub).
 
