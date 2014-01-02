@@ -42,6 +42,18 @@ On Debian Systems
 
 ... and go read [configuring grub](#configuring-grub).
 
+If you want to setup grub-shusher automatically after each upgrade, you
+can edit `/etc/apt/apt.conf`, and add a section like:
+
+    DPkg
+    {
+        Post-Invoke {"/opt/projects/grub-shusher/setup-debian.sh /dev/sda >/dev/null 2>/dev/null || true;";};
+    }
+
+where `/opt/projects/grub-shuser` is the directory where you downloaded grub-shusher, and `/dev/sda` is
+the partition or disk where grub is installed.
+
+
 On Any Other System (TM)
 ------------------------
 
