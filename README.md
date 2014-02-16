@@ -99,3 +99,17 @@ If something goes wrong, you can:
 to clean up after yourself.
 
 You can read more about [grub-shusher on this blog post](http://rabexc.org/posts/grub-shush).
+
+Getting back into GRUB
+----------------------
+
+Once you change `/etc/defaults/grub` and run `update-grub`, grub will no longer show up at
+boot. To get into the menu, you can try two things:
+
+   * Keep `shift` pressed during boot. This is the documented mechanism, did not work for me.
+   * Press `ESC` at boot. This is a bit tricky, as if you press it too early, most BIOSes
+     will bring you in the BIOS menu. If you press it too late, well, the operating system
+     will have booted already. The rule of thumb is to press it at the time the GRUB menu
+     would have showed up, had it been enabled. If you use the settings above, you have *5*
+     seconds of window to press the button. On my laptopt, this is right after the screen
+     is cleared.
