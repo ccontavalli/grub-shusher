@@ -19,13 +19,27 @@ int main(int argc, char** argv) {
          actualArgc--;
          if(filepos == n)
           filepos++;
-         if(argv[n][1] == 'g')
-          gpt = 1;
+         unsigned char x = 1;
+         while(!gpt){
+          switch (argv[n][x]){
+            case 'g':
+              gpt = 1;
+              break;
+            case 'h':
+              printf("Usage: ./mbr [-gh] <device/partition file>\n\tRequires rw permissions of target file.\n\n\t-g: Patch if fewer than all matches found (Required for GPT disk)\n\t\t-h: Print this message\n");
+              return 0;
+            case 'v':
+              printf("Usage: ./mbr [-gh] <device/partition file>\n\tRequires rw permissions of target file.\n\n\t-g: Patch if fewer than all matches found (Required for GPT disk)\n\t\t-h: Print this message\n");
+              return 0;
+          }
+            
+          x++;
+         }
        }
        
   if (actualArgc < 2) {
-    fprintf(stderr, "You need to provide the name of a device to use\n");
-    return 1;
+    printf("Usage: ./mbr [-gh] <device/partition file>\n\tRequires rw permissions of target file.\n\n\t-g: Patch if fewer than all matches found (Required for GPT disk)\n\t\t-h: Print this message\n");
+    return 0;
   }
   
 
@@ -80,15 +94,17 @@ int main(int argc, char** argv) {
   }
   
   if (found == 0 || (found < sizeof(matches) / sizeof(matches[0]) && !gpt)) {
-    fprintf(stderr, "Not enough matches were found, giving up.\nIf you have a gpt disk try running this with the -g flag.");
+    fprintf(stderr, "Not enough matches were found, giving up.\n");
+    if(!gpt)
+      fprintf"If you have a gpt disk try running this with the -g flag.\n");
     fprintf(stderr, "(if you run this command more than once, it's good!\n");
     fprintf(stderr, "it means the first run succeeded)\n");
     return 10;
   }else if (gpt){
     if(found == 1)
-      printf("Found mbr header of gpt disk.\nMake sure to also run this on the ef02 partition of this drive.");
+      printf("Found mbr header of gpt disk.\nMake sure to also run this on the ef02 partition of this drive.\n");
     else if(found == 2)
-      printf("Found ef02 header of gpt grub partition.\nMake sure to also run this on full drive.");
+      printf("Found ef02 header of gpt grub partition.\nMake sure to also run this on full drive.\n");
     gpt=1;
   }
 
@@ -109,6 +125,10 @@ int main(int argc, char** argv) {
     return 5;
   }
   
-  printf("SUCCESS! (maybe! you won't know until you reboot!)\n");
+  printf("SUCCESS!");
+  if(!gpt)
+    printf(" maybe! you won't know until you reboot!)\n");
+  else
+    printf("\n");
   return 0;
 }
