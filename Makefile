@@ -1,15 +1,10 @@
-#CC = gcc-4.8
-CFLAGS = -std=gnu99
+all: shush-mbr shush-kernel
 
-all: mbr grub-kernel
+shush-mbr:
+	g++ shush-mbr.cpp -o shush-mbr
 
-grub-kernel: grub-kernel.o
-
-mbr: mbr.o
-
-mbr.o: mbr.c
-
-mbr.o: grub-kernel.c
+shush-kernel:
+	g++ shush-kernel.cpp -o shush-kernel
 
 clean:
-	rm -f grub-kernel mbr ./*.o
+	rm shush-kernel shush-mbr
