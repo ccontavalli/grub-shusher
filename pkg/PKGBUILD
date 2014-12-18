@@ -1,4 +1,3 @@
-# $Id: PKGBUILD 227100 2014-12-18 22:34:14UTC-5 seblu $
 # Maintainer: Cyberboss <cyberboss1994@hotmail.com>
 
 pkgname=shush-grub
