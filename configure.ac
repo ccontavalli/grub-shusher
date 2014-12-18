@@ -21,5 +21,7 @@ AC_TYPE_SIZE_T
 # Checks for library functions.
 AC_CHECK_FUNCS([strerror])
 
-AC_CONFIG_FILES([src/Makefile])
+AC_CONFIG_FILES(
+[Makefile]
+[src/Makefile])
 AC_OUTPUT
