@@ -2,13 +2,10 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([grub-shusher], [2.0], [cyberboss1994@hotmail.com])
+AC_INIT([grub-shusher],[2.0],[cyberboss1994@hotmail.com])
 AM_INIT_AUTOMAKE([-Wall -Werror])
+AC_CONFIG_SRCDIR([src/shush-kernel.cpp])
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_FILES([
-Makefile
-src/Makefile
-])
 
 # Checks for programs.
 AC_PROG_CXX
@@ -24,4 +21,5 @@ AC_TYPE_SIZE_T
 # Checks for library functions.
 AC_CHECK_FUNCS([strerror])
 
+AC_CONFIG_FILES([src/Makefile])
 AC_OUTPUT
