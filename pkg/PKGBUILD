@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 227100 2014-12-18 22:34:14UTC-5 seblu $
 # Maintainer: Cyberboss <cyberboss1994@hotmail.com>
 
 pkgname=shush-grub
 pkgver=1.0
-pkgrel=1
 pkgdesc='Utilities to silence the early stages of grubs bootloader. Contains shush-kernel and shush-mbr.'
 arch=('i686' 'x86_64')
 license=('GPL3')
@@ -12,8 +10,8 @@ depends=('glibc>=2.20-4')
 source=("git://github.com/cybnetsurfe3011/shush-grub")
 md5sums=('SKIP')
 pkgver() {
-	cd "$pkgname"
-	git describe | sed -r 's/([^-]*-g)/r\1/;s/-/./g'
+	cd ../$pkgname
+	git describe --always | sed -r 's/([^-]*-g)/r/\1/;s/-/./g'
 }
 build() {
   cd $pkgname
