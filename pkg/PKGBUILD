@@ -1,0 +1,27 @@
+# Maintainer: Cyberboss <cyberboss1994@hotmail.com>
+
+pkgname=shush-grub
+pkgver=1.1
+pkgrel=1
+pkgdesc='Utilities to silence the early stages of grubs bootloader. Contains shush-kernel and shush-mbr.'
+arch=('i686' 'x86_64')
+license=('GPL3')
+url='http://github.com/cybnetsurfe3011/shush-grub'
+depends=('glibc>=2.20-4')
+makedepends=('sed>=4.2.2-3')
+source=("git://github.com/cybnetsurfe3011/shush-grub")
+md5sums=('SKIP')
+pkgver() {
+	cd ../$pkgname
+	git describe | sed 's|\(-[0-9]\)-.*|\1|'|sed 's/-/./g'
+}
+build() {
+  cd $pkgname
+  ./configure --prefix=/usr
+  make
+}
+package() {
+  cd $pkgname
+  make DESTDIR=$pkgdir install
+}
+
