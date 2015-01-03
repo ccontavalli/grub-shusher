@@ -20,9 +20,7 @@ The software is as safe as I could make it: it looks for a specific set of patte
 and if not all are found, it stops processing. I have tested it on a few machines,
 and it is working.
 
-Consider though that they will read your master boot record and modify it. This
-probably does not work on EFI systems.
-
+Consider though that they will read your master boot record and modify it.
 
 **USE THEM AT YOUR OWN RISK**
 
@@ -35,7 +33,7 @@ How to use grub-shusher
 **REPLACE /dev/sda with your GRUB PARTITION, used with grub-setup or grub-install**
 
 
-On Debian Systems
+On Debian Systems without EFI
 -----------------
 
     # ./setup-debian.sh /dev/sda
@@ -54,7 +52,7 @@ where `/opt/projects/grub-shuser` is the directory where you downloaded grub-shu
 the partition or disk where grub is installed.
 
 
-On Any Other System (TM)
+On Any Other System (TM) without EFI
 ------------------------
 
     $ make
@@ -75,6 +73,20 @@ On Any Other System (TM)
 
 ... and go read [configuring grub](#configuring-grub).
 
+On Any Other System (TM) with EFI
+------------------------
+
+    $ make
+    $ sudo -s
+    # ./grub-kernel /boot/efi/EFI/***/grubx64.efi
+    
+... and done. Important: 
+
+* make always sure that you have made a backup of `grubx64.efi`
+
+* replace `***` with the distribution name, for example `/boot/efi/EFI/manjaro/grubx64.efi`.
+
+... and go read configuring grub.
 
 Configuring GRUB
 ----------------
