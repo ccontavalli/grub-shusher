@@ -12,7 +12,7 @@
 
 int main(int argc, char** argv) {
   char gpt = 0;
-  char filepos = 1;
+  int filepos = 1;
   int actualArgc = argc;
   for(unsigned char n = 1; n < argc; n++ )            /* Scan through args. */
        if(argv[n][0] == '-'){
@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
       continue;
     }
 
-    size_t offset = ptr - (void*)buffer;
+    size_t offset = (char*)ptr - buffer;
     printf("match[%d]: found at %ld, \"%s\", '%c'\n",
            i, offset, buffer + offset, buffer[offset]);
 
@@ -126,7 +126,7 @@ int main(int argc, char** argv) {
   }
 
   if (close(fd) < 0) {
-    fprintf(stderr, "Close failed! Good luck: %s\n",
+    fprintf(stderr, "Close failed! Good luck: %s - %s\n",
             partition, strerror(errno));
     return 5;
   }

@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
       continue;
     }
 
-    size_t offset = ptr - (void*)buffer;
+    size_t offset = (char*)ptr - buffer;
     printf("match[%d]: found at %ld, \"%s\", '%c'\n",
            i, offset, buffer + offset, buffer[offset]);
 
@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
   }
 
   if (close(fd) < 0) {
-    fprintf(stderr, "Close failed! Good luck: %s\n", argv[1], strerror(errno));
+    fprintf(stderr, "Close failed! Good luck: %s - %s\n", argv[1], strerror(errno));
     return 5;
   }
 

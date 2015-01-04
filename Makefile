@@ -1,5 +1,5 @@
 #CC = gcc-4.8
-CFLAGS = -std=gnu99
+CFLAGS = -std=gnu99 -Wall -pedantic
 
 all: mbr grub-kernel
 
