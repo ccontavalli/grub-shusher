@@ -9,6 +9,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <errno.h>
+#include <stdbool.h>
 
 int main(int argc, char** argv) {
   const char* help = 
@@ -17,34 +18,54 @@ int main(int argc, char** argv) {
       "\t-g: GPT partition - keep going even if not all patches can be found.\n"
       "\t-h (or -v): Print this message\n";
 
-  char gpt = 0;
-  int filepos = 1;
-  int actualArgc = argc;
-  for(unsigned char n = 1; n < argc; n++ )            /* Scan through args. */
-       if(argv[n][0] == '-'){
-         actualArgc--;
-         if(filepos == n)
-          filepos++;
-         unsigned char x = 1;
-         while(!gpt){
-          switch (argv[n][x]){
-            case 'h':
-            case 'v':
-              printf(help);
-              return 0;
+  bool gpt = false;
+  int filepos = 0;
 
-            case 'g':
-              gpt = 1;
-              break;
-          }
-            
-          x++;
-         }
-       }
-       
-  if (actualArgc < 2) {
-    fprintf(stderr, "ERROR: You must specify a file/partition.\n%s", help);
-    return 1;
+  int scanned = 1;
+  for (; scanned < argc; scanned++) {
+    /* If this does not start with -, it is not an option,
+     * it must be the name of the partition. Remember it,
+     * and keep going. */
+    if (*argv[scanned] != '-') {
+      if (filepos != 0) {
+        fprintf(stderr, "ERROR: A single partition can be specified.\n%s", help);
+        return 1;
+      }
+
+      filepos = scanned;
+      continue;
+    }
+
+    /* If this is '--', there are no more options afterward. */
+    const char* ptr = argv[scanned] + 1;
+    if (*ptr == '-' && !*(ptr + 1))
+      break;
+
+    /* Scan the actual option argument for flags. */
+    for (; *ptr; ptr++) {
+      switch (*ptr) {
+        case 'h':
+        case 'v':
+          printf(help);
+          return 0;
+
+        case 'g':
+          gpt = true;
+          break;
+      }
+    }
+  }
+
+  /* Either scanning argv did not find the name of the partition,
+   * or we encountered a --. */
+  if (!filepos) {
+    if ((argc - scanned) != 2) {
+      fprintf(stderr, "ERROR: You must specify a single"
+              " file/partition.\n%s", help);
+      return 1;
+    }
+
+    filepos = argc - 1;
   }
 
   const char* partition = argv[filepos];
