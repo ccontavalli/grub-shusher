@@ -1,30 +1,40 @@
 What is this?
 =============
 
-At boot time, GRUB on Debian and most other distros will show something like:
+On most systems, GRUB shows a message like
 
     GRUB loading.
     Weclome to GRUB!
 
-and then load the boot menu.
+at boot, just before loading the boot menu. Current versions of GRUB
+do not provide any mechanism to disable this message without patching
+and recompiling GRUB itself.
 
-By editing `/etc/default/grub`, you can easily disable the boot menu. However,
-to disable those two messages, you have to patch `grub` and recompile, which is
-cumbersone, as it forces you to maintain your own `.deb` files up-to-date with
-the needed patches.
+This process is cumbersone, as it requires expertise and forces you to
+recompile / repatch every time you update grub.
 
-`grub-shusher` contains two tiny .c files that will patch your master boot record
-and grub files to disable those two messages.   
+`grub-shusher` contains two tiny .c files that instead of patching the
+grub source code, they patch the grub binaries or installed master boot
+record to disable those messages.
 
-The software is as safe as I could make it: it looks for a specific set of patterns,
-and if not all are found, it stops processing. I have tested it on a few machines,
-and it is working.
+The software is generally safe: it looks for a specific set of patterns,
+and if not all are found, it stops processing. It has been tested on a
+few machines, and works as expected.
 
-Consider though that they will read your master boot record and modify it.
+However, I only have access to a handful of machines, and the code
+will modify your master boot record.
 
-**USE THEM AT YOUR OWN RISK**
+**USE IT AT YOUR OWN RISK - YOU ARE RESPONSIBLE FOR BACKING UP AND RESTORING YOUR DATA**
 
-**ONLY TESTED on AMD64 using BIOS BOOT - NO EFI**
+At this point, it has been tested on systems with:
+
+   * EFI
+   * GPT
+   * Standard partition table
+
+If you have success / failure stories to tell, please email me
+directly (ccontavalli AT gmail.com) or open issues on github
+(https://github.com/ccontavalli/grub-shusher/issues).
 
 
 How to use grub-shusher
@@ -33,7 +43,7 @@ How to use grub-shusher
 **REPLACE /dev/sda with your GRUB PARTITION, used with grub-setup or grub-install**
 
 
-On Debian Systems without EFI
+On Debian Systems with normal partition table (no EFI, no GPT)
 -----------------
 
     # ./setup-debian.sh /dev/sda
@@ -52,7 +62,7 @@ where `/opt/projects/grub-shuser` is the directory where you downloaded grub-shu
 the partition or disk where grub is installed.
 
 
-On Any Other System (TM) without EFI
+On Any Other System (TM) with normal partition table (no EFI, no GPT)
 ------------------------
 
     $ make
@@ -73,7 +83,8 @@ On Any Other System (TM) without EFI
 
 ... and go read [configuring grub](#configuring-grub).
 
-On Any Other System (TM) with EFI
+
+On Any System (TM) with EFI
 ------------------------
 
     $ make
@@ -87,6 +98,27 @@ On Any Other System (TM) with EFI
 * replace `***` with the distribution name, for example `/boot/efi/EFI/manjaro/grubx64.efi`.
 
 ... and go read configuring grub.
+
+
+On Any System (TM) with GPT
+-------------------------
+
+    $ make
+    $ sudo -s
+    # ./mbr -g /dev/sda
+    # ./mbr -g /dev/bios-boot-partition
+
+Note:
+
+   * You must provide the *-g* flag, this is important for GPT partitions.
+   * You must run `mbr` twice:
+
+      1. With the partition GRUB was told to use (/dev/sda, in this document).
+      2. With the GPT partition, the one marked with the EF02 type. You can
+         find this partition by running something like:
+    
+    # parted /dev/sda print
+
 
 Configuring GRUB
 ----------------
