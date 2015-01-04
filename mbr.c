@@ -11,6 +11,12 @@
 #include <errno.h>
 
 int main(int argc, char** argv) {
+  const char* help = 
+      "Usage: ./mbr [-gh] <device/partition file>\n"
+      "\tRequires rw permissions of target file.\n\n"
+      "\t-g: Patch if fewer than all matches found (Required for GPT disk)\n"
+      "\t-h (or -v): Print this message\n";
+
   char gpt = 0;
   int filepos = 1;
   int actualArgc = argc;
@@ -23,11 +29,10 @@ int main(int argc, char** argv) {
          while(!gpt){
           switch (argv[n][x]){
             case 'h':
-              printf("Usage: ./mbr [-gh] <device/partition file>\n\tRequires rw permissions of target file.\n\n\t-g: Patch if fewer than all matches found (Required for GPT disk)\n\t-h: Print this message\n");
-              return 0;
             case 'v':
-              printf("Usage: ./mbr [-gh] <device/partition file>\n\tRequires rw permissions of target file.\n\n\t-g: Patch if fewer than all matches found (Required for GPT disk)\n\t-h: Print this message\n");
+              printf(help);
               return 0;
+
             case 'g':
               gpt = 1;
               break;
@@ -38,10 +43,9 @@ int main(int argc, char** argv) {
        }
        
   if (actualArgc < 2) {
-    printf("Usage: ./mbr [-gh] <device/partition file>\n\tRequires rw permissions of target file.\n\n\t-g: Patch if fewer than all matches found (Required for GPT disk)\n\t-h: Print this message\n");
-    return 0;
+    fprintf(stderr, "ERROR: You must specify a file/partition.\n%s", help);
+    return 1;
   }
-  
 
   const char* partition = argv[filepos];
   int fd = open(partition, O_RDONLY);
