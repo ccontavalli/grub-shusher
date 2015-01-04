@@ -21,7 +21,14 @@ cd "$(dirname "$(readlink -f "$(which "$0")")")"
 
 # Compile and run it.
 make
-./grub-kernel /boot/grub/kernel.img
-./grub-kernel /usr/lib/grub/i386-pc/kernel.img
-grub-install "$1"
 ./mbr "$1"
+
+# On modern debian system, this may fail, and may be benign.
+(
+ set +e 
+  ./grub-kernel /boot/grub/kernel.img
+  ./grub-kernel /boot/grub/i386-pc/kernel.img
+  ./grub-kernel /usr/lib/grub/i386-pc/kernel.img
+  grub-install "$1"
+  ./mbr "$1"
+)
