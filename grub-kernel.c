@@ -11,13 +11,12 @@
 #include <errno.h>
 
 int main(int argc, char** argv) {
-  if (argc < 2) {
+  if (argc != 2) {
     fprintf(stderr, "Usage: grub-kernel /path/to/grub/kernel.img\n");
-    fprintf(stderr, "\nYou need to provide the path to kernel.img, generally\n");
+    fprintf(stderr, "\nYou need to provide one path to kernel.img, generally\n");
     fprintf(stderr, "/boot/grub/kernel.img\n");
     return 1;
   } 
-
 
   int fd = open(argv[1], O_RDONLY);
   if (fd < 0) {
