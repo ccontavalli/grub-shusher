@@ -1,4 +1,5 @@
-#CC = gcc-4.8
+# gnu99 is required only for the memmem function, for
+# which there doesn't seem to be any POSIX equivalent?
 CFLAGS = -std=gnu99 -Wall -pedantic
 
 all: mbr grub-kernel
