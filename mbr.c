@@ -13,8 +13,8 @@
 int main(int argc, char** argv) {
   const char* help = 
       "Usage: ./mbr [-gh] <device/partition file>\n"
-      "\tRequires rw permissions of target file.\n\n"
-      "\t-g: Patch if fewer than all matches found (Required for GPT disk)\n"
+      "\tRequires rw permissions of target file (root, most likely).\n\n"
+      "\t-g: GPT partition - keep going even if not all patches can be found.\n"
       "\t-h (or -v): Print this message\n";
 
   char gpt = 0;
@@ -100,20 +100,31 @@ int main(int argc, char** argv) {
     buffer[offset] = '\0';
   }
 
-  if (found == 0 || (found < sizeof(matches) / sizeof(matches[0]) && !gpt)) {
+  /* If we did not find all the required matches on a non gpt partition,
+   * give up immediately, exit with status 10. */
+  if (found < (sizeof(matches) / sizeof(matches[0])) && !gpt) {
     fprintf(stderr, "Not enough matches were found, giving up.\n");
-    if(!gpt)
-      fprintf(stderr,"If you have a gpt disk, run this with the -g flag.\n");
+    fprintf(stderr, "If you have a gpt disk, run this with the -g flag.\n");
     fprintf(stderr, "(if you run this command more than once, it's good!\n");
     fprintf(stderr, "it means the first run succeeded)\n");
     return 10;
-  } else if (gpt){
-    if(found == 1)
-      printf("Found mbr header of gpt disk.\nMake sure to also run this on the ef02 partition of this drive.\n");
-    else if(found == 2)
-      printf("Found ef02 header of gpt grub partition.\nMake sure to also run this on full drive.\n");
-    gpt=1;
   }
+    
+  /* On GPT partitions, it is ok to have partial matches. Keep going, but
+   * warn the user about what to do next. */
+  if (gpt) {
+    switch (found) {
+      case 1:
+        printf("Found mbr header of gpt disk.\n"
+               "Make sure to also run this on the ef02 partition of this drive.\n");
+        break;
+
+      case 2:
+        printf("Found ef02 header of gpt grub partition.\n"
+               "Make sure to also run this on full drive.\n");
+        break;
+    }
+  } 
 
   fd = open(partition, O_RDWR);
   if (fd < 0) {
@@ -135,10 +146,7 @@ int main(int argc, char** argv) {
     return 5;
   }
 
-  printf("SUCCESS!");
-  if(!gpt)
-    printf(" maybe! you won't know until you reboot!)\n");
-  else
-    printf("\n");
+  printf("PATCHED SUCCESSFULLY!\n");
+  printf("(the message should be gone next time you reboot, good luck!)\n");
   return 0;
 }
