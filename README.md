@@ -144,6 +144,7 @@ to clean up after yourself.
 
 You can read more about [grub-shusher on this blog post](http://rabexc.org/posts/grub-shush).
 
+
 Getting back into GRUB
 ----------------------
 
@@ -157,3 +158,13 @@ boot. To get into the menu, you can try two things:
      would have showed up, had it been enabled. If you use the settings above, you have *5*
      seconds of window to press the button. On my laptopt, this is right after the screen
      is cleared.
+
+
+Contributors and THANKS!
+------------------------
+
+Thanks go to:
+
+   * Carlo Contavalli, www.github.com/ccontavalli - main author.
+   * cybnetsurfe3011, www.github.com/cybnetsurfe3011 - GPT support.
+   * vincent-t, www.github.com/vincent-t - EFI testing and documentation.
