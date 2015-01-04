@@ -43,23 +43,26 @@ int main(int argc, char** argv) {
   }
   
 
-  int fd = open(argv[filepos], O_RDONLY);
+  const char* partition = argv[filepos];
+  int fd = open(partition, O_RDONLY);
   if (fd < 0) {
-    fprintf(stderr, "Could not open for read %s: %s\n", argv[filepos], strerror(errno));
+    fprintf(stderr, "Could not open for read %s: %s\n",
+            partition, strerror(errno));
     return 1;
   }
 
-  printf("opened: %s\n", argv[filepos]);
+  printf("opened: %s\n", partition);
 
   char buffer[1024 * 2];
   int data = read(fd, buffer, sizeof(buffer));
   if (data < 0) {
-    fprintf(stderr, "Could not read %s: %s\n", argv[filepos], strerror(errno));
+    fprintf(stderr, "Could not read %s: %s\n",
+            partition, strerror(errno));
     return 2;
   }
   close(fd);
 
-  printf("read: %d bytes from %s\n", data, argv[filepos]);
+  printf("read: %d bytes from %s\n", data, partition);
 
   # define DECLARE_MATCH(str) { str, sizeof(str) - 1 }
   struct {
@@ -92,7 +95,7 @@ int main(int argc, char** argv) {
     ++found;
     buffer[offset] = '\0';
   }
-  
+
   if (found == 0 || (found < sizeof(matches) / sizeof(matches[0]) && !gpt)) {
     fprintf(stderr, "Not enough matches were found, giving up.\n");
     if(!gpt)
@@ -100,7 +103,7 @@ int main(int argc, char** argv) {
     fprintf(stderr, "(if you run this command more than once, it's good!\n");
     fprintf(stderr, "it means the first run succeeded)\n");
     return 10;
-  }else if (gpt){
+  } else if (gpt){
     if(found == 1)
       printf("Found mbr header of gpt disk.\nMake sure to also run this on the ef02 partition of this drive.\n");
     else if(found == 2)
@@ -108,23 +111,26 @@ int main(int argc, char** argv) {
     gpt=1;
   }
 
-  fd = open(argv[filepos], O_RDWR);
+  fd = open(partition, O_RDWR);
   if (fd < 0) {
-    fprintf(stderr, "Could not open for write %s: %s\n", argv[filepos], strerror(errno));
+    fprintf(stderr, "Could not open for write %s: %s\n",
+            partition, strerror(errno));
     return 3;
   }
 
   data = write(fd, buffer, sizeof(buffer));
   if (data < 0) {
-    fprintf(stderr, "Could not write %s, good luck: %s\n", argv[filepos], strerror(errno));
+    fprintf(stderr, "Could not write %s, good luck: %s\n",
+            partition, strerror(errno));
     return 4;
   }
 
   if (close(fd) < 0) {
-    fprintf(stderr, "Close failed! Good luck: %s\n", argv[filepos], strerror(errno));
+    fprintf(stderr, "Close failed! Good luck: %s\n",
+            partition, strerror(errno));
     return 5;
   }
-  
+
   printf("SUCCESS!");
   if(!gpt)
     printf(" maybe! you won't know until you reboot!)\n");
