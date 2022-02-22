@@ -4,7 +4,7 @@ What is this?
 On most systems, GRUB shows a message like
 
     GRUB loading.
-    Weclome to GRUB!
+    Welcome to GRUB!
 
 at boot, just before loading the boot menu. Current versions of GRUB
 do not provide any mechanism to disable this message without patching
